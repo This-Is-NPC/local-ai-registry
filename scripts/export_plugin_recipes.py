@@ -213,10 +213,10 @@ def main():
     by_hardware = {}
     for recipe in recipes.values():
         launch = recipe.get("launch") or {}
-        if recipe.get("status") != "validated" or launch.get("kind") != "docker" or recipe.get("hardware_count", 1) != 1:
+        if recipe.get("status") != "validated" or launch.get("kind") != "docker":
             continue
-        by_hardware.setdefault(recipe["hardware_id"], []).append(recipe)
-        if recipe.get("recommended"):
+        by_hardware.setdefault(recipe["hardware_id"], []).append(recipe)   # alternates may span several cards (`cards`)
+        if recipe.get("recommended") and recipe.get("hardware_count", 1) == 1:   # the recommendation is always a single-card recipe
             eligible.setdefault(recipe["hardware_id"], []).append(recipe)
 
     errors = []
